@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Header from "./Header";
 import Footer from "./Footer";
 
-
 function Home() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -113,7 +112,11 @@ function Home() {
                 alt="teacher"
                 className="teacher-photo"
               />{" "}
-              <h2>Болд</h2> <p>Товч танилцуулга</p>
+              <h2>Г.Амгаланбаатар</h2>{" "}
+              <p style={{ width: "150px" }}>
+                Анхан шатны багш. Суис-ийг хөгжмийн ангиар сурч төгсөн, 15 жил
+                багшилж байгаа.
+              </p>
             </div>
             <div>
               <img
@@ -121,7 +124,11 @@ function Home() {
                 alt="teacher"
                 className="teacher-photo"
               />{" "}
-              <h2>Болд</h2> <p>Товч танилцуулга</p>
+              <h2>Г.Амгаланбаатар</h2>{" "}
+              <p style={{ width: "150px" }}>
+                Анхан шатны багш. Суис-ийг хөгжмийн ангиар сурч төгсөн, 15 жил
+                багшилж байгаа.
+              </p>
             </div>
             <div>
               <img
@@ -129,7 +136,11 @@ function Home() {
                 alt="teacher"
                 className="teacher-photo"
               />{" "}
-              <h2>Болд</h2> <p>Товч танилцуулга</p>
+              <h2>Г.Амгаланбаатар</h2>{" "}
+              <p style={{ width: "150px" }}>
+                Анхан шатны багш. Суис-ийг хөгжмийн ангиар сурч төгсөн, 15 жил
+                багшилж байгаа.
+              </p>
             </div>
           </div>
         </section>

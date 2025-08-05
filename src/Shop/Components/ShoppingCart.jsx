@@ -32,51 +32,50 @@ const ShoppingCart = () => {
       }
     };
 
-    const fetchCart = async () => {
-      try {
-        console.log("[ShoppingCart][fetchCart] Called. accessToken:", accessToken);
-
-        if (accessToken) {
-          console.log("[ShoppingCart][fetchCart] Logged-in user detected");
-          const guestCartId = localStorage.getItem("guest_cart_id");
-
-          if (guestCartId) {
-            await syncGuestCartToUser(guestCartId);
-          }
-
-          const res = await axiosInstance.get("/store/getCart", {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          });
-          console.log("[ShoppingCart][fetchCart] Backend /store/getCart response:", res.data);
-
-          const items = res.data?.data?.items || [];
-          setCartItems(items);
-          console.log("[ShoppingCart][fetchCart] cartItems state updated");
-        } else {
-          console.log("[ShoppingCart][fetchCart] Guest user detected");
-          const cartId = localStorage.getItem("guest_cart_id");
-
-          if (cartId) {
-            const res = await axiosInstance.get("/store/getCart", {
-              params: { cartId },
-            });
-            console.log("[ShoppingCart][fetchCart] Guest /store/getCart response:", res.data);
-
-            const items = res.data?.data?.items || [];
-            setCartItems(items);
-            console.log("[ShoppingCart][fetchCart] cartItems state updated for guest");
-          } else {
-            setCartItems([]);
-            console.log("[ShoppingCart][fetchCart] No guest_cart_id found");
-          }
-        }
-      } catch (err) {
-        console.error("[ShoppingCart][fetchCart] Error loading cart:", err);
-        setCartItems([]);
+const fetchCart = async () => {
+  try {
+    if (accessToken) {
+      // Logged in user
+      console.log("[ShoppingCart][fetchCart] Logged-in user detected");
+      const guestCartId = localStorage.getItem("guest_cart_id");
+      if (guestCartId) {
+        await syncGuestCartToUser(guestCartId);
       }
-    };
+    const cartId = localStorage.getItem("cart_id"); // get cartId from localStorage
+
+      const res = await axiosInstance.get("/store/getCart", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+        params: { cartId },  // pass cartId as query param
+      });
+
+      console.log("[ShoppingCart][fetchCart] Backend /store/getCart response:", res.data);
+      const items = res.data?.data?.items || [];
+      setCartItems(items);
+      console.log("[ShoppingCart][fetchCart] cartItems state updated");
+    } else {
+      // Guest user
+      console.log("[ShoppingCart][fetchCart] Guest user detected");
+      // Use 'cart_id' here (unified cart id)
+      const cartId = localStorage.getItem("cart_id");  // <-- changed here
+      if (cartId) {
+        const res = await axiosInstance.get("/store/getCart", {
+          params: { cartId },
+        });
+        console.log("[ShoppingCart][fetchCart] Guest /store/getCart response:", res.data);
+        const items = res.data?.data?.items || [];
+        setCartItems(items);
+        console.log("[ShoppingCart][fetchCart] cartItems state updated for guest");
+      } else {
+        setCartItems([]);
+        console.log("[ShoppingCart][fetchCart] No cart_id found for guest");
+      }
+    }
+  } catch (err) {
+    console.error("[ShoppingCart][fetchCart] Error loading cart:", err);
+    setCartItems([]);
+  }
+};
+
 
     console.log("[ShoppingCart] useEffect triggered, calling fetchCart");
     fetchCart();

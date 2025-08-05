@@ -1,6 +1,5 @@
 * {
   box-sizing: border-box;
-
 }
 
 .admin-layout {
@@ -75,7 +74,7 @@
   margin-top: 20px;
   color: rgb(254, 116, 129);
 }
-.logoutt-link:hover{
+.logoutt-link:hover {
   color: red;
 }
 
@@ -270,6 +269,13 @@
   .content-table td div {
     flex-direction: column !important;
     align-items: flex-start;
+  }
+  .notification-button {
+    color: white !important;
+  }
+
+  .notification-button svg {
+    color: white !important;
   }
 }
 .teacher-profile-panel {
@@ -480,7 +486,7 @@ form button.btn-edit {
     height: 100vh;
     margin-top: 80px;
   }
-.admin-sidebar.open {
+  .admin-sidebar.open {
     transform: translateX(0);
   }
   .admin-sidebar.mobile-hidden {
@@ -498,7 +504,7 @@ form button.btn-edit {
     gap: 10px;
     padding-top: 10px;
   }
-.admin-header {
+  .admin-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -541,5 +547,124 @@ form button.btn-edit {
   }
   .content-page {
     margin-top: 50px;
+  }
+}
+.notification-fixed {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  z-index: 1200;
+}
+.notification-modal {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  width: 320px;
+  background-color: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  z-index: 1300;
+  padding: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.notification-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 1200;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+.notification-backdrop.fade-out {
+  opacity: 0;
+}
+.notification-button {
+  position: relative;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  color: #ffffff;
+}
+
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 50%;
+}
+@keyframes slideFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.notification-modal.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.notification-modal.fade-out {
+  opacity: 0;
+  transform: translateY(-20px);
+  pointer-events: none;
+}
+.notification-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-list li {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+  color: #333;
+}
+
+.notification-list li:last-child {
+  border-bottom: none;
+}
+
+.close-modal {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #666;
+}
+
+.close-modal:hover {
+  color: #000;
+}
+@media (max-width: 480px) {
+  .notification-modal {
+    right: 10px;
+    width: 90%;
+    top: 60px;
+    padding: 16px;
+  }
+
+  .notification-list li {
+    font-size: 13px;
   }
 }
