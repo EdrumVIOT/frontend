@@ -74,7 +74,7 @@ const AdTeachers = () => {
             <tr>
               <th>Багш</th>
               <th>Гүйцэтгэл</th>
-              <th>Цалин</th>
+              {/* <th>Цалин</th> */}
               <th>Чансаа</th>
               <th>Бүртгүүлсэн</th>
               <th>Нэмэлт</th>
@@ -96,9 +96,9 @@ const AdTeachers = () => {
                   <br />
                   {teacher.totalStudents} Сурагч
                 </td>
-                <td className="paid">
+                {/* <td className="paid">
                   ₮{(teacher.totalRevenue || 0).toLocaleString()}
-                </td>
+                </td> */}
                 <td>
                   <div style={{ display: "flex", alignItems: "center" }}>
                     <Rating

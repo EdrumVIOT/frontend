@@ -290,7 +290,7 @@
 
 .footer-links {
   display: flex;
-  flex: 2 1 400px;
+  flex: 2 1 50px;
   justify-content: space-between;
   gap: 40px;
   flex-wrap: wrap;
@@ -364,7 +364,11 @@
 .mobile-menu-icon {
   display: none;
 }
+
 @media (max-width: 1023px) {
+  .hero-text {
+    margin-top: 30px;
+  }
   .navbar {
     flex-direction: row-reverse;
     padding: 0 20px;
@@ -512,11 +516,15 @@
     font-size: 13px;
   }
   @media (max-width: 559px) {
+    .hero-text {
+      margin-top: 50px;
+      margin-bottom: 0;
+    }
     .feature-grid {
       grid-template-columns: 1fr;
     }
   }
-  .teachers-container {
+  /* .teachers-container {
     gap: 30px;
     justify-content: center;
   }
@@ -532,10 +540,10 @@
 
   .teachers-container div p {
     font-size: 14px;
-  }
+  } */
 
   .footer {
-    padding: 40px 20px;
+    padding: 0px 20px;
   }
 
   .footer-main {

@@ -35,7 +35,6 @@ const AdContent = () => {
             <th>Сургалт</th>
             <th>Багш</th>
             <th>Төлөв</th>
-            <th>Цалин</th>
             <th>Чансаа/5</th>
             <th>Сүүлд шинэчлэгдсэн</th>
           </tr>
@@ -46,7 +45,7 @@ const AdContent = () => {
               <td>{item.name}</td>
               <td>{item.teacher}</td>
               <td>{item.level || "Мэдээлэл байхгүй"}</td>
-              <td>₮{(item.totalRevenue || 0).toLocaleString()}</td>
+              {/* <td>₮{(item.totalRevenue || 0).toLocaleString()}</td> */}
               <td>
                 <Rating
                   name={`read-only-${index}`}

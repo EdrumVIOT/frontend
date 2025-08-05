@@ -668,3 +668,8 @@ form button.btn-edit {
     font-size: 13px;
   }
 }
+@media (max-width: 1370px){
+  .btn-edit{
+    margin-bottom: 10px;
+  }
+}

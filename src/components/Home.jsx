@@ -100,7 +100,7 @@ function Home() {
             </div>
           </div>
         </section>
-        <section className="third-hero">
+        {/* <section className="third-hero">
           <div className="second-hero-header">
             <h2> Манай багш нар</h2>
             <p>Мэргэжлийн хөгжимчид таныг хөгжмийн замд дагуулна.</p>
@@ -113,10 +113,7 @@ function Home() {
                 className="teacher-photo"
               />{" "}
               <h2>Г.Амгаланбаатар</h2>{" "}
-              <p style={{ width: "150px" }}>
-                Анхан шатны багш. Суис-ийг хөгжмийн ангиар сурч төгсөн, 15 жил
-                багшилж байгаа.
-              </p>
+              <p style={{ width: "150px", color: "gray" }}>Анхан шатны багш</p>
             </div>
             <div>
               <img
@@ -125,10 +122,7 @@ function Home() {
                 className="teacher-photo"
               />{" "}
               <h2>Г.Амгаланбаатар</h2>{" "}
-              <p style={{ width: "150px" }}>
-                Анхан шатны багш. Суис-ийг хөгжмийн ангиар сурч төгсөн, 15 жил
-                багшилж байгаа.
-              </p>
+              <p style={{ width: "150px", color: "gray" }}>Анхан шатны багш</p>
             </div>
             <div>
               <img
@@ -137,13 +131,10 @@ function Home() {
                 className="teacher-photo"
               />{" "}
               <h2>Г.Амгаланбаатар</h2>{" "}
-              <p style={{ width: "150px" }}>
-                Анхан шатны багш. Суис-ийг хөгжмийн ангиар сурч төгсөн, 15 жил
-                багшилж байгаа.
-              </p>
+              <p style={{ width: "150px", color: "gray" }}>Анхан шатны багш</p>
             </div>
           </div>
-        </section>
+        </section> */}
       </div>
       <Footer />
     </div>

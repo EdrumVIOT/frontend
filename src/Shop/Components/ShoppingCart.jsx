@@ -12,8 +12,11 @@ const ShoppingCart = () => {
   useEffect(() => {
     const syncGuestCartToUser = async (cartId) => {
       try {
-        console.log("[ShoppingCart][syncGuestCartToUser] Start syncing with cartId:", cartId);
-        const res = await axiosInstance.post(
+        const alreadySynced = localStorage.getItem("guest_cart_synced");
+        if (alreadySynced === "true") return;
+
+        console.log("[ShoppingCart][syncGuestCartToUser] Syncing cartId:", cartId);
+        await axiosInstance.post(
           "/store/assignGuestCartToUser",
           { cartId },
           {
@@ -22,60 +25,52 @@ const ShoppingCart = () => {
             },
           }
         );
-        console.log("[ShoppingCart][syncGuestCartToUser] Response:", res.data);
-        localStorage.removeItem("guest_cart_id");
-        localStorage.removeItem("guest_cart_items");
-        await new Promise((resolve) => setTimeout(resolve, 400));
-        console.log("[ShoppingCart][syncGuestCartToUser] Delay complete, returning from sync");
+
+        localStorage.setItem("guest_cart_synced", "true");
+        console.log("[ShoppingCart][syncGuestCartToUser] Sync complete");
       } catch (err) {
         console.error("[ShoppingCart][syncGuestCartToUser] Error:", err);
       }
     };
 
-const fetchCart = async () => {
-  try {
-    if (accessToken) {
-      // Logged in user
-      console.log("[ShoppingCart][fetchCart] Logged-in user detected");
-      const guestCartId = localStorage.getItem("guest_cart_id");
-      if (guestCartId) {
-        await syncGuestCartToUser(guestCartId);
-      }
-    const cartId = localStorage.getItem("cart_id"); // get cartId from localStorage
+    const fetchCart = async () => {
+      try {
+        const cartId = localStorage.getItem("cart_id");
 
-      const res = await axiosInstance.get("/store/getCart", {
-        headers: { Authorization: `Bearer ${accessToken}` },
-        params: { cartId },  // pass cartId as query param
-      });
+        if (accessToken) {
+          if (cartId) {
+            await syncGuestCartToUser(cartId);
+          }
 
-      console.log("[ShoppingCart][fetchCart] Backend /store/getCart response:", res.data);
-      const items = res.data?.data?.items || [];
-      setCartItems(items);
-      console.log("[ShoppingCart][fetchCart] cartItems state updated");
-    } else {
-      // Guest user
-      console.log("[ShoppingCart][fetchCart] Guest user detected");
-      // Use 'cart_id' here (unified cart id)
-      const cartId = localStorage.getItem("cart_id");  // <-- changed here
-      if (cartId) {
-        const res = await axiosInstance.get("/store/getCart", {
-          params: { cartId },
-        });
-        console.log("[ShoppingCart][fetchCart] Guest /store/getCart response:", res.data);
-        const items = res.data?.data?.items || [];
-        setCartItems(items);
-        console.log("[ShoppingCart][fetchCart] cartItems state updated for guest");
-      } else {
+          const res = await axiosInstance.get("/store/getCart", {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          });
+
+          const data = res.data?.data || {};
+          localStorage.setItem("cart_id", data._id);
+          setCartItems(data.items || []);
+          console.log("[ShoppingCart][fetchCart] User cart loaded");
+        } else {
+          if (!cartId) {
+            setCartItems([]);
+            console.log("[ShoppingCart][fetchCart] No guest cart_id found");
+            return;
+          }
+
+          const res = await axiosInstance.get("/store/getCart", {
+            params: { cartId },
+          });
+
+          const data = res.data?.data || {};
+          localStorage.setItem("cart_id", data._id);
+          setCartItems(data.items || []);
+          console.log("[ShoppingCart][fetchCart] Guest cart loaded");
+        }
+      } catch (err) {
+        console.error("[ShoppingCart][fetchCart] Error:", err);
         setCartItems([]);
-        console.log("[ShoppingCart][fetchCart] No cart_id found for guest");
       }
-    }
-  } catch (err) {
-    console.error("[ShoppingCart][fetchCart] Error loading cart:", err);
-    setCartItems([]);
-  }
-};
-
+    };
 
     console.log("[ShoppingCart] useEffect triggered, calling fetchCart");
     fetchCart();
@@ -91,44 +86,44 @@ const fetchCart = async () => {
 
   const removeItem = async (id, productId) => {
     try {
+      const cartId = localStorage.getItem("cart_id");
+      if (!cartId) return;
+
       if (accessToken) {
         await axiosInstance.delete("/store/removeItemFromCart", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers: { Authorization: `Bearer ${accessToken}` },
           data: { productId },
         });
       } else {
-        const cartId = localStorage.getItem("guest_cart_id");
-        if (!cartId) return;
         await axiosInstance.delete("/store/removeItemFromCart", {
           data: { cartId, productId },
         });
       }
+
       setCartItems((items) => items.filter((item) => item._id !== id));
     } catch (err) {
-      console.error("[ShoppingCart][removeItem] Failed to remove item:", err);
+      console.error("[ShoppingCart][removeItem] Error:", err);
     }
   };
 
   const clearCart = async () => {
     try {
+      const cartId = localStorage.getItem("cart_id");
+      if (!cartId) return;
+
       if (accessToken) {
         await axiosInstance.delete("/store/clearCart", {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
+          headers: { Authorization: `Bearer ${accessToken}` },
         });
       } else {
-        const cartId = localStorage.getItem("guest_cart_id");
-        if (!cartId) return;
         await axiosInstance.delete("/store/clearCart", {
           data: { cartId },
         });
       }
+
       setCartItems([]);
     } catch (err) {
-      console.error("[ShoppingCart][clearCart] Failed to clear cart:", err);
+      console.error("[ShoppingCart][clearCart] Error:", err);
     }
   };
 
@@ -141,13 +136,39 @@ const fetchCart = async () => {
     );
   };
 
-  const handlePlaceOrder = () => {
-    if (!accessToken) {
-      alert("Захиалахын тулд эхлээд нэвтэрнэ үү");
-      return;
-    }
-    alert("Таны захиалга амжилттай боллоо!");
-  };
+const handlePlaceOrder = async () => {
+  if (!accessToken) {
+    alert("Захиалахын тулд эхлээд нэвтэрнэ үү");
+    return;
+  }
+
+  const cartId = localStorage.getItem("cart_id");
+  if (!cartId) {
+    alert("Таны сагс хоосон байна.");
+    return;
+  }
+
+  try {
+    const res = await axiosInstance.post(
+      "/store/makeOrder",
+      { cartId },
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
+
+    console.log("[ShoppingCart][handlePlaceOrder] Order success:", res.data);
+
+    alert("Таны захиалга амжилттай хийгдлээ!");
+    setCartItems([]); // clear UI
+  } catch (err) {
+    console.error("[ShoppingCart][handlePlaceOrder] Error:", err);
+    alert("Захиалга хийхэд алдаа гарлаа. Дахин оролдоно уу.");
+  }
+};
+
 
   return (
     <>
@@ -162,7 +183,9 @@ const fetchCart = async () => {
         <div className="main-content">
           <div className="cart-section">
             <h2 className="cart-title">Shopping cart</h2>
-            <p className="cart-subtitle">You have {cartItems.length} items in your cart</p>
+            <p className="cart-subtitle">
+              You have {cartItems.length} items in your cart
+            </p>
 
             <div className="cart-items">
               {cartItems.length > 0 ? (
@@ -185,14 +208,18 @@ const fetchCart = async () => {
 
                     <div className="quantity-controls">
                       <button
-                        onClick={() => updateQuantity(item._id, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(item._id, item.quantity - 1)
+                        }
                         className="quantity-button"
                       >
                         <Minus size={16} />
                       </button>
                       <span className="quantity-display">{item.quantity}</span>
                       <button
-                        onClick={() => updateQuantity(item._id, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(item._id, item.quantity + 1)
+                        }
                         className="quantity-button"
                       >
                         <Plus size={16} />
@@ -204,7 +231,9 @@ const fetchCart = async () => {
                     </div>
 
                     <button
-                      onClick={() => removeItem(item._id, item.productId?._id)}
+                      onClick={() =>
+                        removeItem(item._id, item.productId?._id)
+                      }
                       className="delete-button"
                     >
                       <Trash2 size={20} color="#007bff" />
@@ -223,7 +252,10 @@ const fetchCart = async () => {
             </div>
 
             {cartItems.length > 0 && (
-              <div className="clear-cart-button-container" style={{ marginTop: "1rem" }}>
+              <div
+                className="clear-cart-button-container"
+                style={{ marginTop: "1rem" }}
+              >
                 <button className="btn-clear-cart" onClick={clearCart}>
                   Бүх барааг устгах
                 </button>
@@ -233,7 +265,9 @@ const fetchCart = async () => {
 
           <div className="payment-section">
             <div className="payment-container">
-              <h3 className="payment-title">Төлбөр төлөх сонголтоо хийнэ үү</h3>
+              <h3 className="payment-title">
+                Төлбөр төлөх сонголтоо хийнэ үү
+              </h3>
 
               <div className="payment-methods">
                 <div className="payment-method">
