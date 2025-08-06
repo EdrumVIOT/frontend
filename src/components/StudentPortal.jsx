@@ -56,83 +56,114 @@ const StudentPortal = () => {
   }, [token, user]);
 
   return (
-    <div className="student-portal">
+    <div className="student-portal">      {/* Main Content */}
       <div className="main-content">
+        {/* Header */}
         <header className="header">
-          <div className="user-info">
+          <div className="user-section">
             <div className="user-avatar">
-              <div className="avatar-circle"></div>
+              <div className="avatar-inner"></div>
             </div>
             <span className="greeting">
-              Сайн уу, {isLoading ? '...' : username}
+              {isLoading ? 'Сайн уу, ...' : `Сайн уу, ${username}`}
             </span>
           </div>
 
-          <div className="progress-section">
-            <div className="progress-circle">
-              <svg width="120" height="120" viewBox="0 0 120 120">
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill="none"
-                  stroke="#e0e7ff"
-                  strokeWidth="8"
-                />
-                <circle
-                  cx="60"
-                  cy="60"
-                  r="50"
-                  fill="none"
-                  stroke="#3b82f6"
-                  strokeWidth="8"
-                  strokeDasharray="314"
-                  strokeDashoffset="125.6"
-                  strokeLinecap="round"
-                  transform="rotate(-90 60 60)"
-                />
-                <text x="60" y="65" textAnchor="middle" className="progress-text">
-                  45%
-                </text>
-              </svg>
+          <div className="header-right">
+            {/* Progress Circle */}
+            <div className="progress-container">
+              <div className="progress-circle">
+                <svg width="100" height="100" className="progress-svg">
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    fill="none"
+                    stroke="#e5e7eb"
+                    strokeWidth="6"
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="45"
+                    fill="none"
+                    stroke="#3b82f6"
+                    strokeWidth="6"
+                    strokeDasharray={`${45 * 2 * Math.PI}`}
+                    strokeDashoffset={`${45 * 2 * Math.PI * (1 - 0.45)}`}
+                    strokeLinecap="round"
+                    className="progress-bar"
+                  />
+                </svg>
+                <div className="progress-text">
+                  <span className="progress-percentage">45%</span>
+                </div>
+              </div>
+              
+              <div className="progress-info">
+                <div className="progress-period">1 7хоног</div>
+                <div className="progress-label">Сар</div>
+                <div className="progress-score">80%</div>
+              </div>
             </div>
-            <div className="progress-info">
-              <div className="progress-label">1 7 хоног</div>
-              <div className="progress-sublabel">Сар</div>
-              <div className="progress-detail">80%</div>
-            </div>
-          </div>
 
-          <div className="notification">
-            <span className="notification-icon">🔔</span>
+            {/* Notification */}
+            <div className="notification">
+              <button className="notification-btn">
+                <div className="notification-icon">🔔</div>
+              </button>
+              <div className="notification-badge"></div>
+            </div>
           </div>
         </header>
 
-        <div className="content-area">
-          <div className="lessons-section">
-            <h3>Сүүлд үзсэн хичээл</h3>
-            <div className="lesson-list">
-              <div className="lesson-item">Видео хичээл 2</div>
-              <div className="lesson-item">Видео хичээл 1</div>
-              <div className="lesson-item">Видео хичээл 5</div>
-              <div className="lesson-item">Видео хичээл 10</div>
+        {/* Content Area */}
+        <main className="content-area">
+          <div className="sections-container">
+            {/* Recent Lessons */}
+            <div className="section lessons-section">
+              <div className="section-header">
+                <h3 className="section-title">Сүүлд үзсэн хичээл</h3>
+              </div>
+              <div className="section-content">
+                {['Видео хичээл 2', 'Видео хичээл 1', 'Видео хичээл 5', 'Видео хичээл 10'].map((lesson, index) => (
+                  <div key={index} className="lesson-item">
+                    <div className="lesson-content">
+                      <div className="play-icon-container">
+                        <div className="play-icon"></div>
+                      </div>
+                      <span className="lesson-title">{lesson}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
 
-          <div className="activity-section">
-            <h3>Recent Activity</h3>
-            <div className="activity-list">
-              <div className="activity-item">
-                <div className="activity-text">Amit commented on "Basic Rhythms" lesson</div>
-                <div className="activity-time">5 min ago</div>
+            {/* Recent Activity */}
+            <div className="section activity-section">
+              <div className="section-header">
+                <h3 className="section-title">Recent Activity</h3>
               </div>
-              <div className="activity-item">
-                <div className="activity-text">New course</div>
-                <div className="activity-time">5 min ago</div>
+              <div className="section-content">
+                <div className="activity-item blue">
+                  <div className="activity-content">
+                    <p className="activity-title">Amit commented on "Basic Rhythms" lesson</p>
+                    <p className="activity-subtitle">Student feedback received</p>
+                  </div>
+                  <span className="activity-time">5 min ago</span>
+                </div>
+                
+                <div className="activity-item green">
+                  <div className="activity-content">
+                    <p className="activity-title">New course</p>
+                    <p className="activity-subtitle">Course material updated</p>
+                  </div>
+                  <span className="activity-time">5 min ago</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </main>
       </div>
     </div>
   );

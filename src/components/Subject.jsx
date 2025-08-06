@@ -1,95 +1,100 @@
-import React, { useEffect, useRef } from "react";
-import "../css/Subject.css";
-import Header from "./Header";
-import Footer from "./Footer";
+import React from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import "../css/Sidebar.css";
+import { useContext } from "react";
+import { UserContext } from "../UserContext";
 
-function Subject() {
-  const videoRefs = useRef([]);
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+const Sidebar = () => {
+  const { logout } = useContext(UserContext);
+  const navigate = useNavigate();
+  const location = useLocation();
+  
+  const menuItems = [
+    {
+      id: "dashboard",
+      icon: "📊",
+      text: "Дашборд",
+      path: "/student-portal",
+    },
+    {
+      id: "lessons",
+      icon: "📝",
+      text: "Хичээл",
+      path: "/lessons",
+    },
+    {
+      id: "assignments",
+      icon: "📋",
+      text: "Дасгал",
+      path: "/assignments",
+    },
+    {
+      id: "completion",
+      icon: "🎮",
+      text: "Тоглоом",
+      path: "/completion",
+    },
+    {
+      id: "payment",
+      icon: "💳",
+      text: "Төлбөр",
+      path: "/payment",
+    },
+  ];
 
-  const handlePlayAndFullscreen = (index) => {
-    const video = videoRefs.current[index];
-    if (video) {
-      if (video.requestFullscreen) {
-        video.requestFullscreen();
-      } else if (video.webkitRequestFullscreen) {
-        video.webkitRequestFullscreen();
-      } else if (video.msRequestFullscreen) {
-        video.msRequestFullscreen();
-      }
+  const handleNavigation = (item) => {
+    if (item.id === "home") {
+      navigate("/");
+    } else {
+      navigate(item.path);
     }
   };
 
-  return (
-    <>
-    <div className="subject-container">
-      <Header />
-      <section className="sub-section1">
-        <div className="sub-section-header">
-          {" "}
-          <h2>Бөмбөрийн хичээлүүд</h2>
-          <h3>
-            Анхан шатнаас эхлээд мэргэжлийн түвшин хүртэл, бүх түвшний сурагчдад
-            тохирсон 6 хичээл
-          </h3>
-          <div className="sub-header-card">
-            <div id="subCard">3 хичээл</div>
-            <div id="subCard">45 багш</div>
-            <div id="subCard">1500 сурагч</div>
-            <div></div>
-          </div>
-        </div>
-      </section>
-      <section className="sub-section2">
-        <div className="sub-section2-cards">
-          {[1, 2, 3].map((_, index) => (
-            <div className="sub-section2-card" key={index}>
-              <div className="card-top-labels">
-                <span className="badge left">Анхан шат</span>
-                <span className="badge right">Хичээл №1</span>
-              </div>
-              <div className="card-video-player">
-                <video
-                  ref={(el) => (videoRefs.current[index] = el)}
-                  src="/videos/homeVideo.mp4"
-                  width="100%"
-                  height="200"
-                  controls
-                  muted
-                  preload="metadata"
-                >
-                  Таны браузер видео дэмжигдэхгүй байх шиг байна.
-                </video>
-              </div>
+  const isActive = (path) => {
+    return location.pathname === path;
+  };
 
-              <h3 className="card-title">Бөмбөрийн үндэс</h3>
-              <p className="card-desc">
-                Анхан шатны сурагчдад зориулсан бөмбөрийн үндсэн техник, суурь,
-                зүтгэлтэй сурах хичээл
-              </p>
-              <p className="card-teacher">Багш: Б.Баттулга</p>
-              <div className="card-meta">
-                <span>🕒 8 долоо хоногийн өмнө</span>
-                <span>👥 248</span>
-                <span>⭐ 4.8</span>
-              </div>
-              <button
-                className="view-button"
-                onClick={() => handlePlayAndFullscreen(index)}
-              >
-                Хичээл үзэх
-              </button>
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
+
+  return (
+    <div className="sidebar">
+      <div className="sidebar-content">
+        <div className="logo-section">
+          <div className="logo">
+            <span className="logo-text">SP</span>
+          </div>
+          <span className="portal-title">Student portal</span>
+        </div>
+        
+        <nav className="nav-menu">
+          {menuItems.map((item) => (
+            <div
+              key={item.id}
+              className={`nav-item ${isActive(item.path) ? "active" : ""}`}
+              onClick={() => handleNavigation(item)}
+            >
+              <div className="nav-icon">{item.icon}</div>
+              <span className="nav-text">{item.text}</span>
             </div>
           ))}
-        </div>
-      </section>
+        </nav>
+      </div>
       
+      <div className="sidebar-footer">
+        <div className="nav-item" onClick={() => navigate("/settings")}>
+          <div className="nav-icon">⚙️</div>
+          <span className="nav-text">Тохиргоо</span>
+        </div>
+        <div className="nav-item logout-item" onClick={handleLogout}>
+          <div className="nav-icon">🚪</div>
+          <span className="nav-text">Гарах</span>
+        </div>
+      </div>
     </div>
-    <Footer/>
-    </>
   );
-}
+};
 
-export default Subject;
+export default Sidebar;
