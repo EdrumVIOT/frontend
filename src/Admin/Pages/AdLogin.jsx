@@ -62,7 +62,15 @@ function AdLogin() {
         navigate("/", { replace: true });
       }
     } catch (err) {
-      setError(err.response?.data?.message || "Нэвтрэхэд алдаа гарлаа");
+      const backendMsg =
+        err.response?.data?.message || "Нэвтрэхэд алдаа гарлаа";
+
+      // If backend returns "invalid credentials", replace with your Mongolian message
+      if (backendMsg.toLowerCase().includes("invalid credentials")) {
+        setError("Нууц үг буруу байна.");
+      } else {
+        setError(backendMsg);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -105,7 +113,7 @@ function AdLogin() {
         {error && <div className="error-text">{error}</div>}
 
         <button
-          className="login-btn"
+          className="login-btn" style={{marginTop:"15px"}}
           onClick={handleLogin}
           disabled={isLoading || !phoneNumber.trim() || !password.trim()}
         >
