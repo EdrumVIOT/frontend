@@ -37,7 +37,7 @@ function TeachContent() {
     <div className="content-page">
       <h2>Контентууд</h2>
       <table className="content-table">
-        <thead>
+        <thead >
           <tr>
             <th>Сургалт</th>
             <th>Гүйцэтгэл</th>

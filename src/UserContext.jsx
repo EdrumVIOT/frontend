@@ -54,19 +54,24 @@ export const UserProvider = ({ children }) => {
     startLogoutTimer(); // ✅ Start timer on login
   };
 
-  const logout = () => {
-    setUser(null);
-    setAccessToken(null);
-    setRefreshToken(null);
+const logout = () => {
+  setUser(null);
+  setAccessToken(null);
+  setRefreshToken(null);
 
-    localStorage.removeItem("user");
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+  localStorage.removeItem("user");
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("refreshToken");
 
-    delete axiosInstance.defaults.headers.common["Authorization"];
+  localStorage.removeItem("cart_id");
+  localStorage.removeItem("guest_cart_synced");
+  localStorage.removeItem("last_synced_cart_id");
 
-    clearTimeout(logoutTimerRef.current); // ✅ Clear timer on logout
-  };
+  delete axiosInstance.defaults.headers.common["Authorization"];
+
+  clearTimeout(logoutTimerRef.current); 
+};
+
   useEffect(() => {
     const storedToken = localStorage.getItem("accessToken");
     const storedUser = localStorage.getItem("user");

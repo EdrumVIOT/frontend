@@ -8,7 +8,9 @@ function Footer() {
       <section className="footer">
         <div className="footer-header">
           <div className="second-hero-header">
-            <h2 style={{marginTop:"60px"}}>Хөгжмийн аялалаа өнөөдөр эхлүүлээрэй</h2>
+            <h2 style={{ marginTop: "60px" }}>
+              Хөгжмийн аялалаа өнөөдөр эхлүүлээрэй
+            </h2>
             <h3>Бүртгүүлж, хөгжмийн ертөнцөд орцгооё</h3>
             <button
               className="hero-btn"
@@ -42,9 +44,9 @@ function Footer() {
             <div className="footer-column">
               <h3 className="footer-title">Хичээлүүд</h3>
               <ul className="footer-list">
-                <li>Бөмбөр</li>
-                <li>Гитар</li>
-                <li>Төгөлдөр хуур</li>
+                <li onClick={() => navigate("/subject")}>Бөмбөр</li>
+                <li onClick={() => navigate("/subject")}>Гитар</li>
+                <li onClick={() => navigate("/subject")}>Төгөлдөр хуур</li>
               </ul>
             </div>
 
