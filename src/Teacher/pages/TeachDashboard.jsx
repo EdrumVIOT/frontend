@@ -10,7 +10,7 @@ function TeachStudent() {
     const fetchStudents = async () => {
       try {
         const response = await axiosInstance.post("/teacher/getStudents");
-        console.log("Response from backend:", response.data);
+        
         setStudents(response.data.students || []);
       } catch (error) {
         console.error("Error fetching students:", error);

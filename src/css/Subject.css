@@ -109,7 +109,7 @@
 
 .view-button {
   margin-top: auto;
-  background-color: black;
+  background-color: #1a202c;
   color: white;
   padding: 10px;
   border: none;
@@ -117,17 +117,17 @@
   cursor: pointer;
   font-size: 14px;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .view-button:hover {
-  background-color: #333;
+  background-color: #1a263f;
 }
 
 .sub-section3 {
   background-color: #f9f9f9;
   padding: 60px 100px;
 }
-
 
 @media (max-width: 1023px) {
   .subject-container {
@@ -193,27 +193,33 @@
     padding: 10px;
   }
 
- 
+  @media (max-width: 480px) {
+    .sub-section-header h2 {
+      font-size: 20px;
+    }
 
-@media (max-width: 480px) {
-  .sub-section-header h2 {
-    font-size: 20px;
-  }
+    .sub-section-header h3 {
+      font-size: 13px;
+    }
 
-  .sub-section-header h3 {
-    font-size: 13px;
-  }
+    .card-meta span {
+      font-size: 12px;
+    }
 
-  .card-meta span {
-    font-size: 12px;
-  }
+    .view-button {
+      font-size: 13px;
+    }
 
-  .view-button {
-    font-size: 13px;
-  }
-
-  .card-video-player video {
-    height: auto;
+    .card-video-player video {
+      height: auto;
+    }
+    .sub-header-card {
+      gap: 10px;
+    }
   }
 }
+@media (min-width: 1023px) {
+  .sub-section-header {
+    padding: 30px 150px;
+  }
 }

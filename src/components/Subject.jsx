@@ -32,12 +32,12 @@ function Subject() {
           <h2>Бөмбөрийн хичээлүүд</h2>
           <h3>
             Анхан шатнаас эхлээд мэргэжлийн түвшин хүртэл, бүх түвшний сурагчдад
-            тохирсон 6 хичээл
+            тохирсон хичээлүүд
           </h3>
           <div className="sub-header-card">
-            <div id="subCard">3 хичээл</div>
+            <div id="subCard">150+ хичээл</div>
             <div id="subCard">45 багш</div>
-            <div id="subCard">1500 сурагч</div>
+            <div id="subCard">1800 сурагч</div>
             <div></div>
           </div>
         </div>

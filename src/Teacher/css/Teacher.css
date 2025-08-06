@@ -112,9 +112,11 @@
 .appointment-box {
   flex: 1;
   padding: 16px;
-  background: #f4f4f4;
+  background: #f2f2f2;
   border-radius: 8px;
-  min-width: 250px;
+  min-width: 500px;
+  color: black;
+  height: 100vh;
 }
 
 .teach-dashboard {
@@ -171,7 +173,6 @@
   padding-bottom: 10px;
 }
 
-/* Enhanced table styling */
 .styled-table {
   width: 100%;
   border-collapse: collapse;
@@ -199,9 +200,8 @@
   background-color: #eef2ff;
 }
 
-/* Enhanced appointment box */
 .enhanced-box {
-  background: #ffffff;
+  background: #f2f2f2;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 20px;
@@ -213,7 +213,6 @@
 .enhanced-box h3 {
   margin-bottom: 12px;
   font-size: 18px;
-  /* font-weight: 500; */
   color: #1f2937;
 }
 
