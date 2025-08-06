@@ -7,7 +7,7 @@ import ShopHeader from "./ShopHeader";
 
 const Description = () => {
   const { kitId } = useParams();
-  const { accessToken } = useContext(UserContext);
+  const { accessToken, user, setUser } = useContext(UserContext); // <-- include setUser
 
   const [kit, setKit] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -37,44 +37,29 @@ const handleAddToCart = async () => {
     return;
   }
 
-  // Update localStorage cart items for guest
-  if (!accessToken) {
-    const existingCart = JSON.parse(localStorage.getItem("guest_cart_items") || "[]");
-    const index = existingCart.findIndex((item) => item.productId === kit._id);
-    if (index !== -1) {
-      existingCart[index].quantity += quantity;
-    } else {
-      existingCart.push({ productId: kit._id, quantity });
-    }
-    localStorage.setItem("guest_cart_items", JSON.stringify(existingCart));
-    console.log("[Description] LocalStorage updated (guest_cart_items):", existingCart);
-  }
-
-  const storedCartId = localStorage.getItem("cart_id");
-
   const body = {
     productId: kit._id,
     quantity,
-    ...(storedCartId ? { cartId: storedCartId } : {}),
   };
 
   const headers = {};
   if (accessToken) {
     headers["Authorization"] = `Bearer ${accessToken}`;
+  } else {
+    const guestCartId = localStorage.getItem("cart_id");
+    if (guestCartId) {
+      body.cartId = guestCartId;
+    }
   }
 
   try {
-    console.log("[Description] Sending addItemToCart with body:", body);
     const res = await axiosInstance.post("/store/addItemToCart", body, { headers });
-    console.log("[Description] /store/addItemToCart response:", res.data);
-
     const newCartId = res.data?.cartId;
 
-    if (newCartId && !storedCartId) {
+    // ✅ Always save cartId to localStorage if returned
+    if (newCartId) {
       localStorage.setItem("cart_id", newCartId);
-      console.log("[Description] Saved cart_id to localStorage:", newCartId);
-    } else {
-      console.log("[Description] cart_id already exists in localStorage, not overwriting.");
+      console.log("[Saved to localStorage] cart_id:", newCartId);
     }
 
     alert("Added to cart!");
@@ -83,7 +68,7 @@ const handleAddToCart = async () => {
     alert("Failed to add to cart.");
   }
 };
-;
+
 
   if (!kit) return <div className="description-loading">Loading...</div>;
 

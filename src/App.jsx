@@ -10,7 +10,7 @@ import Subject from "./components/Subject";
 import Shop from "./Shop/Components/Shop";
 import Description from "./Shop/Components/Description";
 import ShoppingCart from "./Shop/Components/ShoppingCart";
-
+import GuestOrderOTP from "./Shop/Components/GuestOrderOTP";
 import StudentPortal from "./components/StudentPortal";
 import LessonFree from "./components/LessonFree";
 import Assignments from "./components/Assignments";
@@ -38,7 +38,7 @@ import Intermediate from "./Teacher/pages/Intermediate";
 import Pro from "./Teacher/pages/Professional";
 import Advanced from "./Teacher/pages/Advanced";
 import Sidebar from "./components/Sidebar";
-
+ 
 import RequireAuth from "./RequireAuth";
 import { useAxiosInterceptor } from "./axiosInterceptor";
 
@@ -79,6 +79,7 @@ function App() {
       <Route path="/shop" element={<Shop />} />
       <Route path="/cart" element={<ShoppingCart />} />
       <Route path="/description/:kitId" element={<Description />} />
+      <Route path="/guest-verify" element={<GuestOrderOTP />} />
       <Route path="/subject" element={<Subject />} />
 
       {/* Admin routes - protected */}

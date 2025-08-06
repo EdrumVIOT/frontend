@@ -1,25 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Search, ShoppingCart, Home, User } from 'lucide-react';
 import '../css/ShopHeader.css';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../../UserContext'; // Adjust path if needed
 
 const ShopHeader = () => {
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
+  const { accessToken } = useContext(UserContext);
 
-  // Mock navigation functions - replace with your actual navigation logic
   const navigateToHome = () => {
-    console.log('Navigating to home');
     navigate('/');
   };
 
   const navigateToCart = () => {
-    console.log('Navigating to cart');
     navigate('/cart');
   };
 
   const navigateToLogin = () => {
-    console.log('Navigating to login');
     navigate('/login');
   };
 
@@ -27,17 +25,11 @@ const ShopHeader = () => {
     <header className="shop-header">
       <div className="shop-header-container">
         <div className="shop-header-content">
-          
-          {/* Home Button */}
-          <button
-            onClick={navigateToHome}
-            className="home-button"
-            aria-label="Home"
-          >
+
+          <button onClick={navigateToHome} className="home-button" aria-label="Home">
             <Home size={20} />
           </button>
 
-          {/* Search Box */}
           <div className="search-wrapper">
             <div className="search-container">
               <input
@@ -53,29 +45,19 @@ const ShopHeader = () => {
             </div>
           </div>
 
-          {/* Right Side Buttons */}
           <div className="buttons-container">
-            
-            {/* Cart Button */}
-            <button
-              onClick={navigateToCart}
-              className="cart-button"
-              aria-label="Shopping Cart"
-            >
+            <button onClick={navigateToCart} className="cart-button" aria-label="Shopping Cart">
               <ShoppingCart size={18} />
               <span>Сагс</span>
             </button>
 
-            {/* Login Button */}
-            <button
-              onClick={navigateToLogin}
-              className="login-button"
-              aria-label="Login"
-            >
-              <User size={18} />
-              <span>Нэвтрэх</span>
-            </button>
-            
+            {/* Conditionally render Login button if user is NOT logged in */}
+            {!accessToken && (
+              <button onClick={navigateToLogin} className="login-button" aria-label="Login">
+                <User size={18} />
+                <span>Нэвтрэх</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
