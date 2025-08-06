@@ -6,10 +6,12 @@ import "../../Teacher/css/Teacher.css";
 const AdSettings = () => {
   const [activeTab, setActiveTab] = useState(0);
   const [formData, setFormData] = useState({
+    userId: "",
     firstName: "",
     lastName: "",
     email: "",
     phone: "",
+    currentPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
@@ -19,32 +21,34 @@ const AdSettings = () => {
 
   const [fetchLoading, setFetchLoading] = useState(true);
 
-useEffect(() => {
-  const fetchUser = async () => {
-    setFetchLoading(true);
-    try {
-      const res = await axiosInstance.get("/user/getUser");
-      const { firstName, lastName, email, phoneNumber } = res.data.user;
-      setFormData({
-        firstName: firstName || "",
-        lastName: lastName || "",
-        email: email || "",
-        phone: phoneNumber || "",
-        newPassword: "",
-        confirmPassword: "",
-      });
-      setError("");
-    } catch (err) {
-      console.error("Failed to fetch user data:", err);
-      setError("Хэрэглэгчийн мэдээлэл авах үед алдаа гарлаа.");
-    } finally {
-      setFetchLoading(false);
-    }
-  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      setFetchLoading(true);
+      try {
+        const res = await axiosInstance.get("/user/getUser");
+        const { userId, firstName, lastName, email, phoneNumber } =
+          res.data.user;
+        setFormData({
+          userId: userId || "",
+          firstName: firstName || "",
+          lastName: lastName || "",
+          email: email || "",
+          phone: phoneNumber || "",
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: "",
+        });
+        setError("");
+      } catch (err) {
+        console.error("Failed to fetch user data:", err);
+        setError("Хэрэглэгчийн мэдээлэл авах үед алдаа гарлаа.");
+      } finally {
+        setFetchLoading(false);
+      }
+    };
 
-  fetchUser();
-}, []);
-
+    fetchUser();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -71,21 +75,28 @@ useEffect(() => {
 
     setLoading(true);
     try {
+      if (formData.newPassword && !formData.currentPassword) {
+        setError("Шинэ нууц үг оруулахын өмнө одоогийн нууц үгээ оруулна уу.");
+        return;
+      }
       const updateData = {
+        userId: formData.userId,
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
+        phoneNumber: formData.phone,
       };
 
       if (formData.newPassword) {
         updateData.password = formData.newPassword;
       }
 
-      await axiosInstance.put("/user/update", updateData);
+      await axiosInstance.put("/api/user/update", updateData);
       setSuccessMsg("Мэдээлэл амжилттай хадгалагдлаа.");
 
       setFormData((prev) => ({
         ...prev,
+        currentPassword: "",
         newPassword: "",
         confirmPassword: "",
       }));
@@ -138,6 +149,16 @@ useEffect(() => {
               margin="normal"
               disabled
             />
+            <TextField
+              label="Одоогийн нууц үг"
+              type="password"
+              name="currentPassword"
+              value={formData.currentPassword}
+              onChange={handleChange}
+              fullWidth
+              margin="normal"
+            />
+
             <TextField
               label="Шинэ нууц үг"
               type="password"

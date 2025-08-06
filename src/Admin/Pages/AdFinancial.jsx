@@ -2,7 +2,7 @@ import React from "react";
 
 function AdFinancial() {
   return (
-    <div>
+    <div >
       <div className="stat-grid">
         {[1, 2, 3, 4].map((_, idx) => (
           <div key={idx} className="stat-card">
